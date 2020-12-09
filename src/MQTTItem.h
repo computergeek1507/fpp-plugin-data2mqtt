@@ -4,18 +4,17 @@
 #include <list>
 #include <string>
 
-#include <curl/curl.h>
-
-class TasmotaBulb {
+class MQTTItem {
 public:
-    TasmotaBulb(std::string const& ip, unsigned int startChannel );
-    ~TasmotaBulb();
+    MQTTItem(std::string const& _topic, std::string const& _payload, unsigned int startChannel );
+    ~MQTTItem();
 
     bool BulbOn();
     bool BulbOff();
     bool BulbWhite();
 
-    std::string GetIPAddress(){return _ipAddress;}
+    std::string GetTopic(){return _topic;}
+    std::string GetPayload(){return _payload;}
     bool SendData( unsigned char *data);
 
     unsigned int GetStartChannel(){return _startChannel;}
@@ -23,13 +22,11 @@ public:
 private:
 
     unsigned int _startChannel;
-    std::string _ipAddress;
+    std::string _topic;
+    std::string _payload;
     uint8_t _r;
     uint8_t _g;
     uint8_t _b;
-    bool unreachable;
-
-    CURL                  *m_curl;
 
     void outputData( uint8_t r ,uint8_t g ,uint8_t b );
     void sendBulbOn();

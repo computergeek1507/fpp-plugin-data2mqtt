@@ -1,12 +1,4 @@
 
-
-<script type='text/javascript'>
-function gobutton() {
-    var URL = "/api/plugin-apis/sendconfig/true";
-    $.get(URL);
-}
-
-</script>
 <style>
 </style>
 
@@ -17,22 +9,22 @@ function gobutton() {
 
 <h3>Loaded MQTT Items</h3>
 <div>
- <?php
+<?php
  $fp = fopen("/home/fpp/media/config/fpp-data2mqtt-plugin", "r") or die("error");
- $ = array();
+ $mqttItems = array();
  while (!feof($fp)){
   $line = fgets($fp);
   if (strlen($line) > 1) { 
-  list($ip, $start, $size) = explode(",", $line);
-  $tasmotaBulbs[] = array($ip, $start);
+  list($topic, $payload, $start, $size) = explode(",", $line);
+  $mqttItems[] = array($topic, $payload, $start);
   }
  }
  fclose($fp);
  print "<table border='1' cellspacing='0' cellpadding='3'>";
- print "<tr><td>IP</td><td>Start Channel</td></tr>";
- foreach($tasmotaBulbs as $bulb)
+ print "<tr><td>Topic</td><td>Payload</td><td>Start Channel</td></tr>";
+ foreach($mqttItems as $mqtt)
  {
-	  print "<tr><td>{$bulb[0]}</td><td>{$bulb[1]}</td></tr>";
+	  print "<tr><td>{$mqtt[0]}</td><td>{$mqtt[1]}</td><td>{$mqtt[2]}</td></tr>";
  }
   print "</table>";
  
@@ -41,7 +33,7 @@ function gobutton() {
 
 <h4>About</h4>
 <p>
-The FPP data2mqtt plugin will send channel data to a mqtt topics.
+The FPP data2mqtt plugin will send channel data to mqtt topics.
 <p>
 
 </fieldset>
