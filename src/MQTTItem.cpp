@@ -80,6 +80,10 @@ void MQTTItem::outputData( uint8_t r ,uint8_t g ,uint8_t b )
 {
     if(!mqtt->IsConnected())
         return;
+    if(_topic.empty())
+        return;
+    if(_payload.empty())
+        return;
     std::string payload = _payload;
     replaceAll(payload, "%R%" , std::to_string(r));
     replaceAll(payload, "%G%" , std::to_string(g));
