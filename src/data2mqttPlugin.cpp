@@ -99,6 +99,8 @@ public:
         for(auto & out: _MQTTOutputs) {
             outfile << out->GetTopic();
             outfile <<  ",";
+            outfile << out->GetPayload();
+            outfile <<  ",";
             outfile << out->GetStartChannel();
             outfile <<  "\n";
         }

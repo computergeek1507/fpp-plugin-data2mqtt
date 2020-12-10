@@ -10,7 +10,7 @@
 <h3>Loaded MQTT Items</h3>
 <div>
 <?php
- $fp = fopen("/home/fpp/media/config/fpp-data2mqtt-plugin", "r") or die("error");
+ $fp = fopen("/home/fpp/media/config/fpp-plugin-data2mqtt", "r") or die("error");
  $mqttItems = array();
  while (!feof($fp)){
   $line = fgets($fp);
