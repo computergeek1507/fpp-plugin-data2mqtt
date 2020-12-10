@@ -9,8 +9,6 @@ public:
     MQTTItem(std::string const& _topic, std::string const& _payload, unsigned int startChannel );
     ~MQTTItem();
 
-    bool BulbOn();
-    bool BulbOff();
     bool BulbWhite();
 
     std::string GetTopic(){return _topic;}
@@ -29,6 +27,5 @@ private:
     uint8_t _b;
 
     void outputData( uint8_t r ,uint8_t g ,uint8_t b );
-    void sendBulbOn();
-	void sendBulbOff();
+    void RGBtoHSI(float fR, float fG, float fB, float& fH, float& fS, float& fI);
 };

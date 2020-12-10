@@ -44,7 +44,7 @@ private:
 public:
 
     Data2MQTTPlugin() : FPPPlugin("fpp-plugin-data2mqtt") {
-        printf ("fpp-plugin-data2mqtt Starting\n");
+        LogInfo(VB_PLUGIN, "Initializing Data2MQTT Plugin\n");
         readFiles();
     }
     virtual ~Data2MQTTPlugin() 
@@ -116,7 +116,6 @@ public:
                 unsigned int sc =  config[i]["startchannel"].asInt();
                 if(!topic.empty()) {
                     std::unique_ptr<MQTTItem> mqttItem = std::make_unique<MQTTItem>(topic,payload,sc);
-                    printf ("Adding Topic %s\n" ,mqttItem->GetTopic().c_str());
                     _MQTTOutputs.push_back(std::move(mqttItem));
                 }
             }
@@ -131,7 +130,6 @@ public:
             topics += out->GetTopic();
             topics += ",";
         }
-        printf ("Topics %s\n" ,topics.c_str());
         return topics;
     } 
 };
