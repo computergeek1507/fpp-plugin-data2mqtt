@@ -88,7 +88,7 @@ void MQTTItem::outputData( uint8_t r ,uint8_t g ,uint8_t b )
     replaceAll(payload, "%R%" , std::to_string(r));
     replaceAll(payload, "%G%" , std::to_string(g));
     replaceAll(payload, "%B%" , std::to_string(b));
-    
+
     float h,s,i;
 
     RGBtoHSI(r/255.0,r/255.0,r/255.0,h,s,i);
@@ -100,6 +100,14 @@ void MQTTItem::outputData( uint8_t r ,uint8_t g ,uint8_t b )
     replaceAll(payload, "%H%" , std::to_string(ih));
     replaceAll(payload, "%S%" , std::to_string(is));
     replaceAll(payload, "%I%" , std::to_string(ii));
+
+    int rScale = (r * 100)/255;
+    int gScale = (g * 100)/255;
+    int bScale = (b * 100)/255;
+
+    replaceAll(valueStr, "%RS%" , std::to_string(rScale));
+    replaceAll(valueStr, "%GS%" , std::to_string(gScale));
+    replaceAll(valueStr, "%BS%" , std::to_string(bScale));
 
     mqtt->PublishRaw(_topic,payload);
 }

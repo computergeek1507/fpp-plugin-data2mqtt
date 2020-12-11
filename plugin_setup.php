@@ -153,7 +153,21 @@ $(document).ready(function() {
 </table>
 </div>
 </div>
-
+<div>
+<table border=1>
+<tr><td colspan='2'>Replace Values In Payload i.e. "%R%,%G%,%B%"</td>
+</tr><tr><td>Parmeter</td><td>Key</td></tr>
+</tr><tr><td>1st Channel(0-255)</td><td>%R%</td></tr>
+</tr><tr><td>2st Channel(0-255)</td><td>%G%</td></tr>
+</tr><tr><td>3st Channel(0-255)</td><td>%B%</td></tr>
+</tr><tr><td>1st Channel(0-100)</td><td>%RS%</td></tr>
+</tr><tr><td>2st Channel(0-100)</td><td>%GS%</td></tr>
+</tr><tr><td>3st Channel(0-100)</td><td>%BS%</td></tr>
+</tr><tr><td>Hue Value(0-360)</td><td>%H%</td></tr>
+</tr><tr><td>Sat Value(0-100)</td><td>%S%</td></tr>
+</tr><tr><td>Int Value(0-100)</td><td>%I%</td></tr>
+</table>
+</div>
 </div>
 <script>
 
