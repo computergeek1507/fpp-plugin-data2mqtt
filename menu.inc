@@ -13,12 +13,6 @@
 
 $menuEntries = Array(
 	Array(
-		'text' => 'data2mqtt - Status',
-		'type' => 'status',
-		'page' => 'status.php',
-		'wrap' => 1
-	),
-	Array(
 		'text' => 'data2mqtt - Configuration',
 		'type' => 'output',
 		'page' => 'plugin_setup.php',
