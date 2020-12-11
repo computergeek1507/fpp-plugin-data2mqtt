@@ -89,11 +89,16 @@ void MQTTItem::outputData( uint8_t r ,uint8_t g ,uint8_t b )
     replaceAll(payload, "%G%" , std::to_string(g));
     replaceAll(payload, "%B%" , std::to_string(b));
 
+    if(r > 254)
+        replaceAll(valueStr, "%SW%" , "ON");
+    else
+        replaceAll(valueStr, "%SW%" , "OFF");
+
     float h,s,i;
 
-    RGBtoHSI(r/255.0,r/255.0,r/255.0,h,s,i);
+    RGBtoHSI(r/255,g/255,b/255,h,s,i);
     
-    int ih = (h*100)/360;
+    int ih = (h);
     int is = (s*100);
     int ii = (i*100);
     
@@ -141,4 +146,7 @@ void MQTTItem::RGBtoHSI(float fR, float fG, float fB, float& fH, float& fS, floa
             fS = 0.0;
         }
     }
+
+    if(fH < 0.0)
+        fH += 360.0;
 }
