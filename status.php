@@ -15,7 +15,7 @@
  while (!feof($fp)){
   $line = fgets($fp);
   if (strlen($line) > 1) { 
-  list($topic, $payload, $start, $size) = explode(",", $line);
+  list($topic, $payload, $start, $size) = explode(";", $line);
   $mqttItems[] = array($topic, $payload, $start);
   }
  }
