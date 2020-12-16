@@ -19,7 +19,8 @@ MQTTItem::MQTTItem(std::string const& topic, std::string const& payload,  unsign
     _payload(payload),
     _r(0),
     _g(0),
-    _b(0)
+    _b(0),
+    _seqCount(0)
 {
 
 }
@@ -58,8 +59,12 @@ bool MQTTItem::SendData( unsigned char *data)
         uint8_t b = data[_startChannel + 1];
 
         if(r == _r && g == _g && b == _b) {
-            return true;
+            if(_seqCount<1201) {
+                ++_seqCount;
+                return true;
+            }
         }
+        _seqCount=0;
         _r = r;
         _g = g;
         _b = b;
@@ -85,26 +90,17 @@ void MQTTItem::outputData( uint8_t r ,uint8_t g ,uint8_t b )
     if(_payload.empty())
         return;
     std::string payload = _payload;
-    replaceAll(payload, "%R%" , std::to_string(r));
-    replaceAll(payload, "%G%" , std::to_string(g));
-    replaceAll(payload, "%B%" , std::to_string(b));
 
-    if(r > 254)
-        replaceAll(valueStr, "%SW%" , "ON");
-    else
-        replaceAll(valueStr, "%SW%" , "OFF");
+    replaceValues(payload, r, g, b);
 
-    float h,s,i;
+    mqtt->PublishRaw(_topic,payload);
+}
 
-    RGBtoHSI(r/255,g/255,b/255,h,s,i);
-    
-    int ih = (h);
-    int is = (s*100);
-    int ii = (i*100);
-    
-    replaceAll(payload, "%H%" , std::to_string(ih));
-    replaceAll(payload, "%S%" , std::to_string(is));
-    replaceAll(payload, "%I%" , std::to_string(ii));
+void MQTTItem::replaceValues(std::string & valueStr, uint8_t r ,uint8_t g ,uint8_t b )
+{
+    replaceAll(valueStr, "%R%" , std::to_string(r));
+    replaceAll(valueStr, "%G%" , std::to_string(g));
+    replaceAll(valueStr, "%B%" , std::to_string(b));
 
     int rScale = (r * 100)/255;
     int gScale = (g * 100)/255;
@@ -114,19 +110,40 @@ void MQTTItem::outputData( uint8_t r ,uint8_t g ,uint8_t b )
     replaceAll(valueStr, "%GS%" , std::to_string(gScale));
     replaceAll(valueStr, "%BS%" , std::to_string(bScale));
 
-    mqtt->PublishRaw(_topic,payload);
+    if(r > 254)
+        replaceAll(valueStr, "%SW%" , "ON");
+    else
+        replaceAll(valueStr, "%SW%" , "OFF");
+
+    float h,si,sv,i,v;
+
+    RGBtoHSIV(r/255,g/255,b/255,h,si,sv,i,v);
+    
+    int ih = (h);
+    int isi = (si*100);
+    int isv = (sv*100);
+    int ii = (i*100);
+    int iv = (v*100);
+    
+    replaceAll(valueStr, "%H%" , std::to_string(ih));
+    replaceAll(valueStr, "%S%" , std::to_string(isi));
+    replaceAll(valueStr, "%SI%" , std::to_string(isi));
+    replaceAll(valueStr, "%SV%" , std::to_string(isv));
+    replaceAll(valueStr, "%I%" , std::to_string(ii));
+    replaceAll(valueStr, "%V%" , std::to_string(iv));
 }
 
-void MQTTItem::RGBtoHSI(float fR, float fG, float fB, float& fH, float& fS, float& fI) {
+void MQTTItem::RGBtoHSIV(float fR, float fG, float fB, float& fH, float& fSI, float& fSV,float& fI, float& fV) {
     float M  = std::max(std::max(fR, fG), fB);
     float m = std::min(std::min(fR, fG), fB);
     float c = M-m;
-  
+    fV = M;
+    //fL = (1.0/2.0)*(M+m);
     fI = (1.0/3.0)*(fR+fG+fB);
   
     if(c==0) {
         fH = 0.0;
-        fS = 0.0;
+        fSI = 0.0;
     }
     else {
         if(M==fR) {
@@ -140,12 +157,14 @@ void MQTTItem::RGBtoHSI(float fR, float fG, float fB, float& fH, float& fS, floa
         }
         fH *=60.0;
         if(fI!=0) {
-            fS = 1.0 - (m/fI);
+            fSI = 1.0 - (m/fI);
         }
         else {
-            fS = 0.0;
+            fSI = 0.0;
         }
     }
+
+    fSV = M == 0 ? 0 : (M - m) / M;
 
     if(fH < 0.0)
         fH += 360.0;

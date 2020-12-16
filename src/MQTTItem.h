@@ -20,6 +20,7 @@ public:
 private:
 
     unsigned int _startChannel;
+    unsigned int _seqCount;
     std::string _topic;
     std::string _payload;
     uint8_t _r;
@@ -27,5 +28,7 @@ private:
     uint8_t _b;
 
     void outputData( uint8_t r ,uint8_t g ,uint8_t b );
-    void RGBtoHSI(float fR, float fG, float fB, float& fH, float& fS, float& fI);
+
+    void replaceValues(std::string & valueStr, uint8_t r ,uint8_t g ,uint8_t b );
+    void RGBtoHSIV(float fR, float fG, float fB, float& fH, float& fSI, float& fSV,float& fI, float& fV);
 };

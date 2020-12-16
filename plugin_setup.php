@@ -163,9 +163,11 @@ $(document).ready(function() {
 </tr><tr><td>1st Channel(0-100)</td><td>%RS%</td></tr>
 </tr><tr><td>2st Channel(0-100)</td><td>%GS%</td></tr>
 </tr><tr><td>3st Channel(0-100)</td><td>%BS%</td></tr>
-</tr><tr><td>Hue Value(0-360)</td><td>%H%</td></tr>
-</tr><tr><td>Sat Value(0-100)</td><td>%S%</td></tr>
-</tr><tr><td>Int Value(0-100)</td><td>%I%</td></tr>
+</tr><tr><td>(HSI/HSV)Hue Value(0-360)</td><td>%H%</td></tr>
+</tr><tr><td>(HSI)Sat Value(0-100)</td><td>%S% or %SI%</td></tr>
+</tr><tr><td>(HSI)Int Value(0-100)</td><td>%I%</td></tr>
+</tr><tr><td>(HSV)Sat Value(0-100)</td><td>%SV%</td></tr>
+</tr><tr><td>(HSV)Int Value(0-100)</td><td>%V%</td></tr>
 </tr><tr><td>1st Channel as Switch Value(ON or OFF)</td><td>%SW%</td></tr>
 </table>
 </div>
